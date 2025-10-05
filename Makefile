@@ -11,6 +11,8 @@ clean:
 
 build: src/
 	mkdir -p dist/
+	mkdir -p .keep/
+	touch .keep/keep
 	yarn -D
 	yarn build
 

@@ -80,6 +80,7 @@ jobs:
           name: build
           path: |
             dist/
+            .keep/
 
   deploy-general:
     runs-on: ubuntu-latest

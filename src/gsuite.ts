@@ -349,7 +349,7 @@ const parseGDataEntry = (entry: any): ExistingContact | null => {
  * Gets primary email from contact
  */
 const getPrimaryEmail = (contact: GoogleContact): string => {
-  return (contact.email).toLowerCase();
+  return contact.email.toLowerCase();
 };
 
 /**

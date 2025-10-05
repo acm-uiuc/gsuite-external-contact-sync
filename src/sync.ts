@@ -49,8 +49,7 @@ const contactsDiffer = (
     entra.givenName !== google.givenName ||
     entra.familyName !== google.familyName ||
     entra.displayName !== google.displayName ||
-    entra.email !== google.email ||
-    entra.upn !== google.upn
+    entra.email !== google.email
   );
 };
 

@@ -9,13 +9,15 @@
   "scripts": {
     "build": "tsc && node build.js",
     "lint": "prettier --check *.ts **/*.ts",
-    "prettier:write": "prettier --write *.ts **/*.ts"
+    "prettier:write": "prettier --write *.ts **/*.ts",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
     "@types/aws-lambda": "^8.10.138",
     "@types/node": "^24.3.0",
     "esbuild": "^0.25.3",
+    "husky": "^9.1.7",
     "typescript": "^5.9.2"
   },
   "dependencies": {

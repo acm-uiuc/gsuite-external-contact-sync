@@ -76,10 +76,10 @@ const syncContacts = async (
   let skippedNoName = 0;
 
   for (const user of entraUsers) {
-    if (!user.givenName && !user.familyName && !user.displayName) {
+    if (!user.familyName || !user.displayName) {
       logger.info(
         { email: user.email, upn: user.upn },
-        "Skipping user with no name information",
+        "Skipping user with no first and/or last name information",
       );
       skippedNoName++;
       continue;

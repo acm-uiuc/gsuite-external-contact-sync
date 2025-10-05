@@ -6,7 +6,6 @@ export interface GoogleContact {
   email: string;
   givenName: string;
   familyName: string;
-  displayName: string;
 }
 
 export interface ExistingContact {
@@ -302,6 +301,8 @@ const contactToAtomXml = (contact: GoogleContact): string => {
     );
   }
 
+  const fullName = `${escapeXml(contact.givenName)} ${escapeXml(contact.familyName)}`;
+
   return `<?xml version="1.0" encoding="UTF-8"?>
 <atom:entry xmlns:atom="http://www.w3.org/2005/Atom"
             xmlns:gd="http://schemas.google.com/g/2005">
@@ -310,7 +311,7 @@ const contactToAtomXml = (contact: GoogleContact): string => {
   <gd:name>
     <gd:givenName>${escapeXml(contact.givenName)}</gd:givenName>
     <gd:familyName>${escapeXml(contact.familyName)}</gd:familyName>
-    <gd:fullName>${escapeXml(contact.displayName)}</gd:fullName>
+    <gd:fullName>${fullName}</gd:fullName>
   </gd:name>
 ${emails.join("\n")}
 </atom:entry>`;
@@ -325,8 +326,6 @@ const parseGDataEntry = (entry: any): ExistingContact | null => {
 
   const primaryEmail =
     emails.find((e: any) => e.primary === "true")?.address || emails[0].address;
-  const otherEmail =
-    emails.find((e: any) => e.rel?.includes("other"))?.address || "";
   const name = entry.gd$name || {};
 
   // Extract ID from entry ID (format: https://www.google.com/m8/feeds/contacts/{domain}/base/{id})
@@ -340,7 +339,6 @@ const parseGDataEntry = (entry: any): ExistingContact | null => {
       email: primaryEmail || "",
       givenName: name.gd$givenName?.$t || "",
       familyName: name.gd$familyName?.$t || "",
-      displayName: name.gd$fullName?.$t || primaryEmail || "",
     },
   };
 };

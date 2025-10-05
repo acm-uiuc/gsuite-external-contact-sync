@@ -42,7 +42,6 @@ const contactsDiffer = (
   return (
     entra.givenName !== google.givenName ||
     entra.familyName !== google.familyName ||
-    entra.displayName !== google.displayName ||
     entra.email !== google.email
   );
 };
@@ -74,10 +73,12 @@ const syncContacts = async (
   // Build lookup map for Entra users
   const entraMap = new Map<string, GoogleContact>();
   let skippedNoName = 0;
+  let skippedSameDomain = 0;
 
   for (const user of entraUsers) {
+    // Skip users with no name information
     if (!user.familyName || !user.displayName) {
-      logger.info(
+      logger.debug(
         { email: user.email, upn: user.upn },
         "Skipping user with no first and/or last name information",
       );
@@ -85,11 +86,21 @@ const syncContacts = async (
       continue;
     }
 
+    // Skip users on the same domain (not external)
+    const userDomain = extractDomain(user.email || user.upn);
+    if (userDomain === domain) {
+      logger.debug(
+        { email: user.email, upn: user.upn, domain: userDomain },
+        "Skipping user on same domain (not external)",
+      );
+      skippedSameDomain++;
+      continue;
+    }
+
     const contact: GoogleContact = {
       email: user.email,
       givenName: user.givenName,
       familyName: user.familyName,
-      displayName: user.displayName,
     };
     entraMap.set(getPrimaryEmail(user), contact);
   }
@@ -98,6 +109,13 @@ const syncContacts = async (
     logger.info(
       { skipped: skippedNoName },
       "Skipped users with no name information",
+    );
+  }
+
+  if (skippedSameDomain > 0) {
+    logger.info(
+      { skipped: skippedSameDomain, domain },
+      "Skipped users on same domain (not external)",
     );
   }
 

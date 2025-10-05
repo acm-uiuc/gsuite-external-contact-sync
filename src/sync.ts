@@ -15,12 +15,6 @@ import {
   GoogleContact,
 } from "./gsuite.js";
 
-interface ExistingContact {
-  id: string;
-  etag: string;
-  contact: GoogleContact;
-}
-
 interface SyncStats {
   totalEntraUsers: number;
   totalGoogleContacts: number;

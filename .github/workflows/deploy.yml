@@ -1,0 +1,137 @@
+name: Deploy all resources to General account
+run-name: General deploy - @${{ github.actor }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    name: Run Unit Tests
+    steps:
+      - uses: actions/checkout@v4
+        env:
+          HUSKY: "0"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
+
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "yarn"
+
+      - name: Restore Yarn Cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: yarn-modules-${{ runner.arch }}-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-dev
+          restore-keys: |
+            yarn-modules-${{ runner.arch }}-${{ runner.os }}-
+
+      - name: Run unit testing
+        run: make test_unit
+
+  build:
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 15
+    name: Build Application
+    steps:
+      - uses: actions/checkout@v4
+        env:
+          HUSKY: "0"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "yarn"
+
+      - name: Restore Yarn Cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: yarn-modules-${{ runner.arch }}-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-dev
+          restore-keys: |
+            yarn-modules-${{ runner.arch }}-${{ runner.os }}-
+
+      - name: Run build
+        run: make build
+        env:
+          HUSKY: "0"
+          RunEnvironment: prod 
+
+      - name: Upload Build files
+        uses: actions/upload-artifact@v4
+        with:
+          include-hidden-files: true
+          name: build
+          path: |
+            dist/
+
+  deploy-general:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      id-token: write
+      contents: read
+    concurrency:
+      group: ${{ github.event.repository.name }}-general-env
+      cancel-in-progress: false
+    environment: "AWS General"
+    name: Deploy to General and Run Live Tests
+    needs:
+      - test
+      - build
+    steps:
+      - uses: actions/checkout@v4
+        env:
+          HUSKY: "0"
+
+      - name: Set up Node for testing
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "yarn"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
+
+      - name: Restore Yarn Cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: yarn-modules-${{ runner.arch }}-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-dev
+          restore-keys: |
+            yarn-modules-${{ runner.arch }}-${{ runner.os }}-
+
+      - name: Download Build files
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::898906883758:role/GitHubActionsRole
+          role-session-name: GSuite_Dirsync_General_Deployment_${{ github.run_id }}
+          aws-region: us-east-1
+
+      - name: Publish to AWS
+        run: make deploy
+        env:
+          HUSKY: "0"

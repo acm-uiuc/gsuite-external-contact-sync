@@ -303,15 +303,6 @@ const contactToAtomXml = (contact: GoogleContact): string => {
     );
   }
 
-  if (
-    contact.upn &&
-    contact.upn.toLowerCase() !== contact.email.toLowerCase()
-  ) {
-    emails.push(
-      `    <gd:email rel="http://schemas.google.com/g/2005#other" address="${escapeXml(contact.upn)}" />`,
-    );
-  }
-
   return `<?xml version="1.0" encoding="UTF-8"?>
 <atom:entry xmlns:atom="http://www.w3.org/2005/Atom"
             xmlns:gd="http://schemas.google.com/g/2005">

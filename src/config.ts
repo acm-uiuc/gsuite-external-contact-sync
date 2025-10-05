@@ -17,7 +17,7 @@ const SecretsConfigSchema = z.object({
   googleServiceAccountJson: z
     .string()
     .min(1, "googleServiceAccountJson is required"),
-  deleteRemovedContacts: z.boolean().default(false),
+  deleteRemovedContacts: z.boolean().default(true),
 });
 
 const EnvironmentSchema = z.enum(["dev", "prod"]);

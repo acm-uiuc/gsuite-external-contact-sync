@@ -73,15 +73,26 @@ const syncContacts = async (
 
   // Build lookup map for Entra users
   const entraMap = new Map<string, GoogleContact>();
+  let skippedNoName = 0;
+
   for (const user of entraUsers) {
+    if (!user.givenName && !user.familyName && !user.displayName) {
+      logger.info({ email: user.email, upn: user.upn }, "Skipping user with no name information");
+      skippedNoName++;
+      continue;
+    }
+
     const contact: GoogleContact = {
       email: user.email,
-      upn: user.upn,
       givenName: user.givenName,
       familyName: user.familyName,
       displayName: user.displayName,
     };
     entraMap.set(getPrimaryEmail(user), contact);
+  }
+
+  if (skippedNoName > 0) {
+    logger.info({ skipped: skippedNoName }, "Skipped users with no name information");
   }
 
   // Determine what operations to perform

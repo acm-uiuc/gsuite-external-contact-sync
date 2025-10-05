@@ -4,7 +4,6 @@ import { logger } from "./logging.js";
 
 export interface GoogleContact {
   email: string;
-  upn: string;
   givenName: string;
   familyName: string;
   displayName: string;
@@ -339,7 +338,6 @@ const parseGDataEntry = (entry: any): ExistingContact | null => {
     etag,
     contact: {
       email: primaryEmail || "",
-      upn: otherEmail || "",
       givenName: name.gd$givenName?.$t || "",
       familyName: name.gd$familyName?.$t || "",
       displayName: name.gd$fullName?.$t || primaryEmail || "",
@@ -351,7 +349,7 @@ const parseGDataEntry = (entry: any): ExistingContact | null => {
  * Gets primary email from contact
  */
 const getPrimaryEmail = (contact: GoogleContact): string => {
-  return (contact.email || contact.upn).toLowerCase();
+  return (contact.email).toLowerCase();
 };
 
 /**

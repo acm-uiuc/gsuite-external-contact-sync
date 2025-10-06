@@ -264,13 +264,6 @@ export const handler = async (
     };
   } catch (error) {
     logger.error({ error }, "Sync failed");
-
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: "Sync failed",
-        error: error instanceof Error ? error.message : "Unknown error",
-      }),
-    };
+    throw error;
   }
 };

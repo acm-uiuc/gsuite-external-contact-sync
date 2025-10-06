@@ -31,7 +31,7 @@ esbuild
   .build({
     ...commonParams,
     entryPoints: ["./src/sync.js"],
-    outdir: "./dist/",
+    outdir: "./dist/dirsync/",
   })
   .then(() => console.log("GSuite sync lambda build completed successfully!"))
   .catch((error) => {

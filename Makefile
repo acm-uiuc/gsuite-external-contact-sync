@@ -37,6 +37,7 @@ test_unit: install
 	terraform -chdir=terraform/envs/general init -reconfigure -backend=false -upgrade
 	terraform -chdir=terraform/envs/general fmt -check
 	terraform -chdir=terraform/envs/general validate
+	yarn test
 
 lock_terraform:
 	terraform -chdir=terraform/envs/general providers lock -platform=windows_amd64 -platform=darwin_amd64 -platform=darwin_arm64 -platform=linux_amd64 -platform=linux_arm64

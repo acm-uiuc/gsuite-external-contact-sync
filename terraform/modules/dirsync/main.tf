@@ -112,3 +112,22 @@ resource "aws_cloudwatch_metric_alarm" "invocation_error" {
     FunctionName = local.sync_lambda_name
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "no_invocation" {
+  alarm_name          = "${local.sync_lambda_name}-no-invocation"
+  alarm_description   = "GSuite Directory Sync lambda has not executed in the past 4 hours."
+  namespace           = "AWS/Lambda"
+  metric_name         = "Invocations"
+  statistic           = "Sum"
+  period              = "14400"
+  evaluation_periods  = "1"
+  comparison_operator = "LessThanThreshold"
+  threshold           = "1"
+  treat_missing_data  = "breaching"
+  alarm_actions = [
+    var.SnsArn
+  ]
+  dimensions = {
+    FunctionName = local.sync_lambda_name
+  }
+}

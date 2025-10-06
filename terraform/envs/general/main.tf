@@ -37,4 +37,5 @@ module "dirsync" {
   RunEnvironment   = "prod"
   LogRetentionDays = var.LogRetentionDays
   SyncFrequency    = "rate(1 hour)"
+  SnsArn           = var.SnsArn
 }

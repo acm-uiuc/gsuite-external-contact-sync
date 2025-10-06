@@ -19,3 +19,7 @@ variable "SyncFrequency" {
   type        = string
   description = "EventBridge cron frequency for triggering the sync lambda"
 }
+
+variable "SnsArn" {
+  type = string
+}

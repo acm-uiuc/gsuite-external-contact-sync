@@ -93,3 +93,22 @@ resource "aws_cloudwatch_event_target" "lambda_target" {
   target_id = "DirsyncLambdaTarget"
   arn       = aws_lambda_function.this.arn
 }
+
+
+resource "aws_cloudwatch_metric_alarm" "invocation_error" {
+  alarm_name          = "${local.sync_lambda_name}-error-invocation"
+  alarm_description   = "GSuite Directory Sync lambda threw a critical error."
+  namespace           = "AWS/Lambda"
+  metric_name         = "Errors"
+  statistic           = "Sum"
+  period              = "300"
+  evaluation_periods  = "1"
+  comparison_operator = "GreaterThanThreshold"
+  threshold           = "1"
+  alarm_actions = [
+    var.SnsArn
+  ]
+  dimensions = {
+    FunctionName = local.sync_lambda_name
+  }
+}

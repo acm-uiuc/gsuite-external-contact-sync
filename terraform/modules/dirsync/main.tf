@@ -56,17 +56,18 @@ resource "aws_iam_role_policy_attachment" "this" {
 }
 
 resource "aws_lambda_function" "this" {
-  depends_on       = [aws_cloudwatch_log_group.this]
-  function_name    = local.sync_lambda_name
-  role             = aws_iam_role.this.arn
-  architectures    = ["arm64"]
-  handler          = "sync.handler"
-  runtime          = "nodejs22.x"
-  filename         = data.archive_file.lambda_code.output_path
-  timeout          = 900
-  memory_size      = 2048
-  source_code_hash = data.archive_file.lambda_code.output_sha256
-  description      = "GSuite Sync Lambda."
+  depends_on                     = [aws_cloudwatch_log_group.this]
+  function_name                  = local.sync_lambda_name
+  role                           = aws_iam_role.this.arn
+  architectures                  = ["arm64"]
+  handler                        = "sync.handler"
+  runtime                        = "nodejs22.x"
+  filename                       = data.archive_file.lambda_code.output_path
+  timeout                        = 900
+  memory_size                    = 2048
+  source_code_hash               = data.archive_file.lambda_code.output_sha256
+  reserved_concurrent_executions = 1
+  description                    = "GSuite Sync Lambda."
   environment {
     variables = {
       "RunEnvironment" = var.RunEnvironment

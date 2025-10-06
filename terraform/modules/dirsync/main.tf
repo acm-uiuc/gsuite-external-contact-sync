@@ -1,6 +1,6 @@
 data "archive_file" "lambda_code" {
   type        = "zip"
-  source_dir  = "${path.module}/../../../dist"
+  source_dir  = "${path.module}/../../../dist/dirsync"
   output_path = "${path.module}/../../../dist/dirsync.zip"
 }
 locals {

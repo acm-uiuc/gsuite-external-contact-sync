@@ -2,13 +2,14 @@
 
 ## Purpose
 
-This Lambda function syncs members from our Entra ID (Azure AD) tenant to Google Workspace as external domain shared contacts. 
+This Lambda function syncs members from our Entra ID (Azure AD) tenant to Google Workspace as external domain shared contacts.
 
 ### Why This Exists
 
 In the `acm.illinois.edu` Google Workspace tenant, we cannot use people chips or autocomplete for `@illinois.edu` email addresses because they're in a separate identity system (GSuite for UIUC). This creates friction when trying to email or mention Illinois users.
 
 **This sync solves that problem** by:
+
 - Automatically pulling all active users from the University of Illinois Entra ID tenant
 - Creating them as external contacts in Google Workspace's domain shared contacts
 - Making Illinois email addresses searchable and autocomplete-able in Gmail, Calendar, Drive, etc.
@@ -17,6 +18,9 @@ In the `acm.illinois.edu` Google Workspace tenant, we cannot use people chips or
 Users will now see Illinois emails appear in autocomplete suggestions and people chips work correctly across all Google Workspace apps.
 
 ## Architecture
+
+> [!IMPORTANT]
+> This application is deployed in the AWS us-east-2 region, not the default us-east-1 region.
 
 - **Source**: ACM @ UIUC Entra ID tenant
 - **Destination**: Google Workspace Domain Shared Contacts for `acm.illinois.edu`
@@ -38,6 +42,7 @@ Configuration is stored in AWS Secrets Manager under the secret `gsuite-dirsync-
 ## Contact Format
 
 Contacts are created with:
+
 - **Primary email**: The user's mail field from Entra ID
 - **Name fields**: Given name, family name, and display name
 - **Smart parsing**: Automatically parses display names like "First Last", "Last, First", etc. when individual name fields are missing
@@ -49,6 +54,7 @@ The Lambda is deployed via Terraform. Set the Makefile.
 ## Monitoring
 
 View logs in CloudWatch Logs:
+
 - Log group: `/aws/lambda/gsuite-dirsync-engine`
 - Structured JSON logging via Pino
 - Contains detailed sync statistics and any errors
@@ -56,10 +62,12 @@ View logs in CloudWatch Logs:
 ## Development
 
 Run locally:
+
 ```bash
 yarn -D
 make local
 ```
+
 ---
 
 For detailed setup instructions, see the setup documentation.

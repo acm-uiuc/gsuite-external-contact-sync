@@ -10,5 +10,5 @@ variable "ProjectId" {
 
 variable "SnsArn" {
   type    = string
-  default = "arn:aws:sns:us-east-1:898906883758:DiscordGeneralAlerts"
+  default = "arn:aws:sns:us-east-2:898906883758:DiscordGeneralAlerts"
 }

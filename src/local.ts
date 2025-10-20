@@ -8,8 +8,8 @@ const mockEvent = {
   source: "aws.events",
   account: "123456789012",
   time: new Date().toISOString(),
-  region: "us-east-1",
-  resources: ["arn:aws:events:us-east-1:123456789012:rule/test"],
+  region: "us-east-2",
+  resources: ["arn:aws:events:us-east-2:123456789012:rule/test"],
   detail: {},
 };
 
@@ -18,7 +18,7 @@ const mockContext = {
   callbackWaitsForEmptyEventLoop: false,
   functionName: "test-function",
   functionVersion: "1",
-  invokedFunctionArn: "arn:aws:lambda:us-east-1:123456789012:function:test",
+  invokedFunctionArn: "arn:aws:lambda:us-east-2:123456789012:function:test",
   memoryLimitInMB: "512",
   awsRequestId: "test-request-id",
   logGroupName: "/aws/lambda/test",
@@ -31,7 +31,7 @@ const mockContext = {
 
 // Set environment variables
 process.env.RunEnvironment = "dev";
-process.env.AWS_REGION = "us-east-1";
+process.env.AWS_REGION = "us-east-2";
 
 // Run the handler
 (async () => {

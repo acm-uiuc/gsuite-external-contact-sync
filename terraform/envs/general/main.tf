@@ -9,9 +9,9 @@ terraform {
   required_version = ">= 1.2"
 
   backend "s3" {
-    bucket       = "898906883758-terraform"
+    bucket       = "898906883758-terraform-use2"
     key          = "gsuite-dirsync"
-    region       = "us-east-1"
+    region       = "us-east-2"
     use_lockfile = true
   }
 }
@@ -19,7 +19,7 @@ terraform {
 
 provider "aws" {
   allowed_account_ids = ["898906883758"]
-  region              = "us-east-1"
+  region              = "us-east-2"
   default_tags {
     tags = {
       project           = var.ProjectId

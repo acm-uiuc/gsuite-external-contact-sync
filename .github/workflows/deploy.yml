@@ -24,7 +24,6 @@ jobs:
         with:
           terraform_version: 1.12.2
 
-
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -71,7 +70,7 @@ jobs:
         run: make build
         env:
           HUSKY: "0"
-          RunEnvironment: prod 
+          RunEnvironment: prod
 
       - name: Upload Build files
         uses: actions/upload-artifact@v4
@@ -125,12 +124,11 @@ jobs:
         with:
           name: build
 
-
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::898906883758:role/GitHubActionsRole
           role-session-name: GSuite_Dirsync_General_Deployment_${{ github.run_id }}
-          aws-region: us-east-1
+          aws-region: us-east-2
 
       - name: Publish to AWS
         run: make deploy

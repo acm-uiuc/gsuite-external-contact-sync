@@ -50,7 +50,7 @@ describe("sync", () => {
         source: "aws.events",
         account: "123456789012",
         time: new Date().toISOString(),
-        region: "us-east-1",
+        region: "us-east-2",
         resources: [],
         detail: {},
       } as any;

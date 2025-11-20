@@ -38,4 +38,5 @@ module "dirsync" {
   LogRetentionDays = var.LogRetentionDays
   SyncFrequency    = "rate(1 hour)"
   SnsArn           = var.SnsArn
+  PrioritySnsArn   = var.PrioritySnsArn
 }

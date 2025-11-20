@@ -23,3 +23,7 @@ variable "SyncFrequency" {
 variable "SnsArn" {
   type = string
 }
+
+variable "PrioritySnsArn" {
+  type = string
+}

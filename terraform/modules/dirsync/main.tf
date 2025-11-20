@@ -66,7 +66,7 @@ resource "aws_lambda_function" "this" {
   timeout          = 900
   memory_size      = 2048
   source_code_hash = data.archive_file.lambda_code.output_sha256
-  # reserved_concurrent_executions = 1
+  reserved_concurrent_executions = 1
   description = "GSuite Sync Lambda."
   environment {
     variables = {
@@ -127,6 +127,24 @@ resource "aws_cloudwatch_metric_alarm" "no_invocation" {
   treat_missing_data  = "breaching"
   alarm_actions = [
     var.SnsArn
+  ]
+  dimensions = {
+    FunctionName = local.sync_lambda_name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "repeated_errors" {
+  alarm_name          = "${local.sync_lambda_name}-repeated-errors"
+  alarm_description   = "GSuite Directory Sync lambda has had multiple errors in the past 12 hours."
+  namespace           = "AWS/Lambda"
+  metric_name         = "Errors"
+  statistic           = "Sum"
+  period              = "43200"  # 12 hours
+  evaluation_periods  = "1"
+  comparison_operator = "GreaterThanThreshold"
+  threshold           = "6"
+  alarm_actions = [
+    var.PrioritySnsArn
   ]
   dimensions = {
     FunctionName = local.sync_lambda_name

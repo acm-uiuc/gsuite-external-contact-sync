@@ -12,3 +12,8 @@ variable "SnsArn" {
   type    = string
   default = "arn:aws:sns:us-east-2:898906883758:DiscordGeneralAlerts"
 }
+
+variable "PrioritySnsArn" {
+  type    = string
+  default = "arn:aws:sns:us-east-2:898906883758:PriorityDiscordAlerts"
+}

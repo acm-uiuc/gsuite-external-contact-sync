@@ -6,16 +6,16 @@ This Lambda function syncs members from our Entra ID (Azure AD) tenant to Google
 
 ### Why This Exists
 
-In the `acm.illinois.edu` Google Workspace tenant, we cannot use people chips or autocomplete for `@illinois.edu` email addresses because they're in a separate identity system (GSuite for UIUC). This creates friction when trying to email or mention Illinois users.
+In the `acm.illinois.edu` Google Workspace tenant, we cannot use people chips or autocomplete for `@illinois.edu` email addresses because they're in a separate identity system (GSuite for ACM vs. GSuite for UIUC). This creates friction when trying to email or mention Illinois users.
 
 **This sync solves that problem** by:
 
-- Automatically pulling all active users from the University of Illinois Entra ID tenant
-- Creating them as external contacts in Google Workspace's domain shared contacts
-- Making Illinois email addresses searchable and autocomplete-able in Gmail, Calendar, Drive, etc.
-- Providing a seamless experience where ACM members can easily find and contact other Illinois users
+- Automatically pulling all active users from the ACM Entra ID tenant
+- Creating them as external contacts in ACM Google Workspace's domain shared contacts
+- Making Illinois email addresses for ACM members searchable and autocomplete-able in Gmail, Calendar, Drive, etc.
+- Providing a seamless experience where ACM GSuite users can easily find and contact other Illinois users
 
-Users will now see Illinois emails appear in autocomplete suggestions and people chips work correctly across all Google Workspace apps.
+ACM GSuite users will now see Illinois emails appear in autocomplete suggestions and people chips work correctly across all Google Workspace apps.
 
 While we should make this more event-driven by provisioning this information when a user becomes a member, users may update their information from various sources at various times. A long term goal should be to move these updates to only fire on profile updates, but considering that the runtime is so low given no deltas, this wasn't a priority in the PoC.
 

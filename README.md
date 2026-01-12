@@ -17,6 +17,8 @@ In the `acm.illinois.edu` Google Workspace tenant, we cannot use people chips or
 
 Users will now see Illinois emails appear in autocomplete suggestions and people chips work correctly across all Google Workspace apps.
 
+While we should make this more event-driven by provisioning this information when a user becomes a member, users may update their information from various sources at various times. A long term goal should be to move these updates to only fire on profile updates, but considering that the runtime is so low given no deltas, this wasn't a priority in the PoC.
+
 ## Architecture
 
 > [!IMPORTANT]

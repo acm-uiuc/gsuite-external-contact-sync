@@ -59,6 +59,8 @@ View logs in CloudWatch Logs:
 - Structured JSON logging via Pino
 - Contains detailed sync statistics and any errors
 
+There are times where the Google API just decides to go down without any status page notice. If you notice errors that aren't explained at all, try turning the sync off for a couple of days and see if Google fixes it.
+
 ## Development
 
 Run locally:
